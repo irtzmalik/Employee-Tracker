@@ -49,7 +49,8 @@ function main_Menu() {
                 "Add roles",
                 "Add employees",
                 "Update employee roles",
-                "Delete"
+                "Delete",
+                "View Department Total Budget"
               
             ]
         })  
@@ -87,6 +88,10 @@ function main_Menu() {
                 
                 case "Delete":
                     Delete_Choices();
+                    break;
+
+                case "View Department Total Budget"   :
+                    total_budget_dept();
                     break;
 
             }
@@ -423,5 +428,54 @@ function addEmployees() {
 
     });
         
+
+ }
+ 
+ function Delete_Choices()
+ {
+    inquirer.prompt({
+        name: "choices",
+        type: "list",
+        message: "What would you like to delete?",
+        choices: [
+            "Delete Department",
+            "Delete Role",
+            "Delete Employee"
+        ]
+    })
+        .then(function (answer) {
+          
+            switch (answer.choices) {
+
+                case "Delete Department":
+                    delete_Department();
+                    break;
+
+                case "Delete Role":
+                    delete_role();
+                    break;
+
+                case "Delete Employee":
+                    delete_employee();
+                    break;
+
+              
+
+            }
+        });
+ }
+
+ function total_budget_dept()
+ {
+
+    var query = "select SUM(r.salary) as total_budget from department d  join role r ON d.id=r.department_id join employee emp on emp.role_id= r.id;"
+
+    connection.query(query, function (err, res) {
+        
+   // var result= JSON.parse(res);
+   console.table(res);
+        sub_Menu();
+    });
+
 
  }
