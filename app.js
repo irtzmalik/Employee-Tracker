@@ -50,7 +50,10 @@ function main_Menu() {
                 "Add employees",
                 "Update employee roles",
                 "Delete",
-                "View Department Total Budget"
+                "View Department Total Budget",
+                "Show Everything of Employee",
+                "Show Everything of Role",
+                "Show Everything of Department"
               
             ]
         })  
@@ -93,6 +96,18 @@ function main_Menu() {
                 case "View Department Total Budget"   :
                     total_budget_dept();
                     break;
+
+                case "Show Everything of Employee"   :
+                    view_all_employee();
+                    break;
+                    
+                case "Show Everything of Role"   :
+                    view_all_role();
+                    break;
+
+                case "Show Everything of Department"   :
+                    view_all_department();
+                    break;            
 
             }
         });
@@ -146,7 +161,7 @@ function viewDepartment() {
 }
 function viewEmployees() {
     console.log('\n'.repeat(999));
-    var query = "SELECT concat(concat(first_name,' ',last_name)) as name FROM employee";
+    var query = "SELECT concat(concat(first_name,' ',last_name)) as Employee_name FROM employee";
     connection.query(query, function (err, res) {
        
         if (err) throw err;
@@ -189,6 +204,7 @@ function addDepartment() {
 
 function addRoles() {
     connection.query("SELECT * FROM department", function (err, results) {
+       //
         if (err) throw err;
         inquirer.prompt([
             {
@@ -361,6 +377,8 @@ function addEmployees() {
 
  function delete_Department()
  {
+    //view_all_department();
+     
     inquirer.prompt([
         {
             type: "input",
@@ -368,15 +386,30 @@ function addEmployees() {
             message: "What do you want to delete"
         }
     ]).then(function (answer) {
+        // var query_1 = "SELECT * FROM department;"
+       
+
+     
+        // connection.query(query_1, function (err, res) {
+        //     // console.log(err);
+        //      console.table(res);
+            
+            
+        //  });
         console.log("Here "+answer.dept_name);
         var query = "DELETE FROM department WHERE name = '" + answer.dept_name + "';"
+       
 
+     
         connection.query(query, function (err, res) {
-            console.log(err);
-            console.log("Department deleted");
-           // viewRole();
-           
-        });
+            // console.log(err);
+             console.log("Department deleted");
+            
+            
+         });
+            
+            
+         sub_Menu();
 
     });
         
@@ -392,18 +425,57 @@ function addEmployees() {
             message: "Enter Role Id to delete"
         }
     ]).then(function (answer) {
-        console.log("Here "+answer.role_id);
+        //console.log("Here "+answer.role_id);
         var query = "DELETE FROM role WHERE id = '" + answer.role_id + "';"
 
         connection.query(query, function (err, res) {
-            console.log(err);
+           // console.log(err);
             console.log("role deleted");
-           // viewRole();
+           sub_Menu();
            
         });
 
     });
         
+
+ }
+
+ function view_all_employee()
+ {
+ 
+    var query = "SELECT * FROM employee;"
+
+        connection.query(query, function (err, res) {
+           // console.log(err);
+            console.table(res);
+            sub_Menu();
+        });
+
+ }
+
+ function view_all_role()
+ {
+ 
+    var query = "SELECT * FROM role;"
+
+        connection.query(query, function (err, res) {
+           // console.log(err);
+            console.table(res);
+            sub_Menu();
+        });
+
+ }
+
+ function view_all_department()
+ {
+ 
+    var query = "SELECT * FROM department;"
+
+        connection.query(query, function (err, res) {
+           // console.log(err);
+            console.table(res);
+            sub_Menu();
+        });
 
  }
 
@@ -416,7 +488,7 @@ function addEmployees() {
             message: "Write empolyee Id to Delete "
         }
     ]).then(function (answer) {
-        console.log("Here "+answer.employee_id);
+       // console.log("Here "+answer.employee_id);
         var query = "DELETE FROM role WHERE id = '" + answer.employee_id + "';"
 
         connection.query(query, function (err, res) {
@@ -425,6 +497,7 @@ function addEmployees() {
            // viewRole();
            
         });
+        
 
     });
         
